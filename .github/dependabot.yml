@@ -13,6 +13,6 @@ updates:
       time: "12:00"
       day: wednesday
     groups:
-      oktagon:
+      rust:
         patterns:
           - "*"
