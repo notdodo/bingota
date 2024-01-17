@@ -1,6 +1,8 @@
-use crate::application::{ports::input_port::InputPort, service::MyService};
+use crate::{
+    application::{ports::input_port::InputPort, service::MyService},
+    read_file_content,
+};
 use axum::{extract, extract::State, http::StatusCode, Json};
-use tokio::{fs, io};
 
 #[derive(serde::Deserialize, serde::Serialize)]
 pub struct FileInfo {
@@ -23,6 +25,6 @@ pub async fn get_file(
     }
 }
 
-async fn read_file_content(file_path: &str) -> Result<String, io::Error> {
-    fs::read_to_string(file_path).await
+pub async fn ping() -> StatusCode {
+    StatusCode::NO_CONTENT
 }

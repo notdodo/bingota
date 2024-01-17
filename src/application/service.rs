@@ -12,10 +12,7 @@ impl std::fmt::Debug for MyService {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let count = match self.count.lock() {
             Ok(guard) => guard,
-            Err(poisoned) => {
-                let guard = poisoned.into_inner();
-                guard
-            }
+            Err(poisoned) => poisoned.into_inner(),
         };
 
         f.debug_struct("MyService").field("count", &count).finish()
