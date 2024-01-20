@@ -3,6 +3,7 @@ use axum::Router;
 use crate::application::service::MyService;
 use crate::infrastructure::web::routes::{routes_default, routes_v1};
 
+#[tracing::instrument(name = "web::start_server")]
 pub async fn start_server() {
     let state = MyService::new();
     let app: Router = Router::new()

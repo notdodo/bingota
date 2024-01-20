@@ -9,6 +9,7 @@ pub struct FileInfo {
     filename: String,
 }
 
+#[tracing::instrument(skip(info), name = "web::get_file")]
 pub async fn get_file(
     State(state): State<MyService>,
     info: extract::Query<FileInfo>,
@@ -25,6 +26,7 @@ pub async fn get_file(
     }
 }
 
+#[tracing::instrument(name = "web::ping")]
 pub async fn ping() -> StatusCode {
     StatusCode::NO_CONTENT
 }
