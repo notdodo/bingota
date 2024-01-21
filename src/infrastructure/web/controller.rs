@@ -1,26 +1,43 @@
 use crate::application::ports::input_port::InputPort;
 use crate::{application::service::Bingokta, read_file_content};
-use axum::{extract, extract::State, http::StatusCode, Json};
+use axum::{
+    extract::{Query, State},
+    http::StatusCode,
+    response::{IntoResponse, Response},
+    Json,
+};
+use std::collections::HashMap;
 
-#[derive(serde::Deserialize, serde::Serialize)]
+#[derive(serde::Deserialize, serde::Serialize, Debug)]
 pub struct FileInfo {
     filename: String,
 }
 
+#[derive(serde::Deserialize, serde::Serialize, Debug)]
+pub struct FileContent {
+    content: String,
+}
+
+#[derive(serde::Deserialize, serde::Serialize)]
+pub struct FileInfoError {
+    error: String,
+}
+
 #[tracing::instrument(skip(info), name = "web::get_file")]
-pub async fn get_file(
-    State(state): State<Bingokta>,
-    info: extract::Query<FileInfo>,
-) -> (StatusCode, Json<FileInfo>) {
-    let _ = state.process().await;
+pub async fn get_file(State(state): State<Bingokta>, Query(info): Query<FileInfo>) -> Response {
     match read_file_content(&info.filename).await {
-        Ok(content) => (StatusCode::OK, Json(FileInfo { filename: content })),
-        Err(_) => (
-            StatusCode::NOT_FOUND,
-            Json(FileInfo {
-                filename: "J".to_string(),
-            }),
-        ),
+        Ok(content) => {
+            let _ = state.process().await;
+            (StatusCode::OK, Json(FileContent { content })).into_response()
+        }
+        Err(_) => {
+            tracing::error!("file {} not found", info.filename);
+            (
+                StatusCode::NOT_FOUND,
+                Json(HashMap::new().insert("error", "file not found")),
+            )
+                .into_response()
+        }
     }
 }
 
