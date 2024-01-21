@@ -1,0 +1,24 @@
+name: Infrastructure Security Scan
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.rs"
+      - "**.md"
+      - "Cargo.*"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "**.rs"
+      - "**.md"
+      - "Cargo.*"
+
+concurrency:
+  group: bingotà-kics-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  infra-security-scan:
+    uses: notdodo/github-actions/.github/workflows/infra-security-scan.yml@a61f17e4551042735886e3c91a1af1c6a743b465
