@@ -4,35 +4,30 @@ use std::sync::{Arc, Mutex};
 use crate::application::ports::input_port::InputPort;
 
 #[derive(Clone)]
-pub struct MyService {
+pub struct Bingokta {
     pub count: Arc<Mutex<u8>>,
 }
 
-impl std::fmt::Debug for MyService {
+impl std::fmt::Debug for Bingokta {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let count = match self.count.lock() {
             Ok(guard) => guard,
             Err(poisoned) => poisoned.into_inner(),
         };
 
-        f.debug_struct("MyService").field("count", &count).finish()
+        f.debug_struct("Bingokta").field("count", &count).finish()
     }
 }
 
 #[async_trait]
-impl InputPort for MyService {
-    // async fn process(&self) -> Result<(), Box<dyn std::error::Error>> {
-    //     self.increment().await;
-    //     println!("{:?}", self);
-    //     Ok(())
-    // }
+impl InputPort for Bingokta {
     async fn process(&self) {
         self.increment().await;
         println!("{:?}", self);
     }
 }
 
-impl MyService {
+impl Bingokta {
     pub fn new() -> Self {
         Self {
             count: Arc::new(Mutex::new(0)),
@@ -53,7 +48,7 @@ impl MyService {
     }
 }
 
-impl Default for MyService {
+impl Default for Bingokta {
     fn default() -> Self {
         Self::new()
     }

@@ -3,7 +3,6 @@ version: "3.8"
 services:
   web_app:
     build: .
-    image: bingokta
     cap_drop:
       - ALL
     ports:
@@ -20,12 +19,6 @@ services:
         limits:
           cpus: "0.5"
           memory: 512M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -48,12 +41,6 @@ services:
         limits:
           cpus: "0.5"
           memory: 512M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:16686"]
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
 
 networks:
   bingokta:

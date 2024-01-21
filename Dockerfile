@@ -1,4 +1,4 @@
-ARG BASE_IMAGE=rust:1-slim-buster
+ARG BASE_IMAGE=rust:slim-bookworm
 
 FROM $BASE_IMAGE as planner
 WORKDIR /app
@@ -23,6 +23,6 @@ RUN cargo install --target x86_64-unknown-linux-musl --path .
 
 FROM scratch
 WORKDIR /app
-COPY --from=builder /usr/local/cargo/bin/rust_demo .
+COPY --from=builder /usr/local/cargo/bin/bingokta .
 HEALTHCHECK CMD curl --fail http://localhost:8080/ping || exit 1
-CMD ["./rust_demo"]
+CMD ["./bingokta"]

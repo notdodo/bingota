@@ -14,7 +14,7 @@ pub fn init_otel() -> Uninstall {
     let service_name = "bingoktà".to_string();
     let opentelemetry_ip = std::env::var("OPENTELEMETRY_IP")
         .ok()
-        .unwrap_or("192.168.178.29".into());
+        .unwrap_or("127.0.0.1".into());
     let app_env = std::env::var("APP_ENV")
         .ok()
         .and_then(|e| Environment::from_str(&e).ok())

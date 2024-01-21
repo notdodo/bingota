@@ -1,7 +1,5 @@
-use crate::{
-    application::{ports::input_port::InputPort, service::MyService},
-    read_file_content,
-};
+use crate::application::ports::input_port::InputPort;
+use crate::{application::service::Bingokta, read_file_content};
 use axum::{extract, extract::State, http::StatusCode, Json};
 
 #[derive(serde::Deserialize, serde::Serialize)]
@@ -11,7 +9,7 @@ pub struct FileInfo {
 
 #[tracing::instrument(skip(info), name = "web::get_file")]
 pub async fn get_file(
-    State(state): State<MyService>,
+    State(state): State<Bingokta>,
     info: extract::Query<FileInfo>,
 ) -> (StatusCode, Json<FileInfo>) {
     let _ = state.process().await;
