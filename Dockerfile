@@ -1,5 +1,4 @@
 ARG BASE_IMAGE=rust:1-slim-buster
-ARG VCS_REVISION
 
 FROM $BASE_IMAGE as planner
 WORKDIR /app
@@ -16,16 +15,14 @@ RUN cargo chef cook --release --recipe-path recipe.json
 FROM $BASE_IMAGE as builder
 WORKDIR /app
 COPY . .
-# Copy over the cached dependencies
 COPY --from=cacher /app/target target
 COPY --from=cacher $CARGO_HOME $CARGO_HOME
-# We need static linking for smaller image.
 RUN rustup target add x86_64-unknown-linux-musl
-ARG VCS_REVISION
 # `cargo build` doesn't work in static linking, need `cargo install`
-RUN VCS_REVISION=$VCS_REVISION cargo install --target x86_64-unknown-linux-musl --path .
+RUN cargo install --target x86_64-unknown-linux-musl --path .
 
 FROM scratch
 WORKDIR /app
 COPY --from=builder /usr/local/cargo/bin/rust_demo .
+HEALTHCHECK CMD curl --fail http://localhost:8080/ping || exit 1
 CMD ["./rust_demo"]
