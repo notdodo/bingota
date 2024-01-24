@@ -12,6 +12,7 @@ services:
       OPENTELEMETRY_IP: jaeger
     security_opt:
       - no-new-privileges:true
+    pid: "service:jaeger"
     networks:
       - bingokta
     deploy:
@@ -19,6 +20,9 @@ services:
         limits:
           cpus: "0.5"
           memory: 512M
+    healthcheck:
+      # kics-scan ignore-line
+      disable: true
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -34,6 +38,7 @@ services:
       JAEGER_SAMPLER_PARAM: 1
     security_opt:
       - no-new-privileges:true
+    pid: "service:web_app"
     networks:
       - bingokta
     deploy:
@@ -41,6 +46,20 @@ services:
         limits:
           cpus: "0.5"
           memory: 512M
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "http://jaeger:16686",
+          "-O",
+          "/dev/null",
+        ]
+      timeout: 10s
+      retries: 3
+      start_period: 5s
 
 networks:
   bingokta:

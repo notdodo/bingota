@@ -2,6 +2,7 @@
 .gitignore
 .github
 Dockerfile
+.dockerignore
 *.yml
 *.yaml
 *.md
