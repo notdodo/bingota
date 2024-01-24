@@ -22,7 +22,7 @@ services:
           memory: 512M
     healthcheck:
       # kics-scan ignore-line
-      test: ["NONE"]
+      disable: true
 
   jaeger:
     image: jaegertracing/all-in-one:latest
