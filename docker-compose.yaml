@@ -24,15 +24,6 @@ services:
       # kics-scan ignore-line
       disable: true
 
-  db:
-    image: postgres:latest
-    container_name: db
-    ports:
-      - "5050:5432"
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=${DB_ROOT_PASSWORD}
-
   jaeger:
     image: jaegertracing/all-in-one:latest
     cap_drop:
