@@ -10,4 +10,8 @@ axum = { version = "0.7.4", features = ["macros"] }
 prima-tracing = { version = "0.7.2", features = ["traces", "dev"] }
 serde = { version = "1.0.195", features = ["derive"] }
 tokio = { version = "1.35.1", features = ["fs", "macros", "rt-multi-thread"] }
+tower-sessions = "0.10.0"
 tracing = "0.1.40"
+
+[dev-dependencies]
+axum-test = "14.2.2"
