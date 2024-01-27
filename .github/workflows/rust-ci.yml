@@ -47,7 +47,7 @@ jobs:
         with:
           cache-on-failure: true
       - name: Install tools
-        run: cargo install --force cargo-make clippy-sarif sarif-fmt
+        run: cargo install cargo-make clippy-sarif sarif-fmt
       - name: Run clippy
         run: >
           cargo clippy --all-features --all --message-format=json
