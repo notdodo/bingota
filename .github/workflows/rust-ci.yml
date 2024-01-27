@@ -40,5 +40,7 @@ jobs:
         # v4.1.1
       - name: Run rustfmt
         run: cargo fmt --check
+      - name: Install cargo-make
+        run: cargo install --force cargo-make
       - name: Cargo make clippy
         run: cargo make --profile ci clippy
