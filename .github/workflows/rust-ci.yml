@@ -42,12 +42,12 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         # v4.1.1
-      - name: Install tools
-        run: cargo install --force cargo-make clippy-sarif sarif-fmt
       - name: Cargo cache
         uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
         with:
           cache-on-failure: true
+      - name: Install tools
+        run: cargo install --force cargo-make clippy-sarif sarif-fmt
       - name: Run clippy
         run: >
           cargo clippy --all-features --all --message-format=json
