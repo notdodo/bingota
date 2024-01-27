@@ -19,11 +19,26 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         # v4.1.1
       - name: Build
         run: cargo build --verbose
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        # v4.1.1
       - name: Run tests
         run: cargo test --verbose
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        # v4.1.1
+      - name: Run rustfmt
+        run: cargo fmt --check
+      - name: Cargo make clippy
+        run: cargo make --profile ci clippy
