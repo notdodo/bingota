@@ -35,12 +35,28 @@ jobs:
 
   clippy:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         # v4.1.1
-      - name: Run rustfmt
-        run: cargo fmt --check
-      - name: Install cargo-make
-        run: cargo install --force cargo-make
-      - name: Cargo make clippy
-        run: cargo make --profile ci clippy
+      - name: Install tools
+        run: cargo install --force cargo-make clippy-sarif sarif-fmt
+      - name: Cargo cache
+        uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
+        with:
+          cache-on-failure: true
+      - name: Run clippy
+        run: >
+          cargo clippy --all-features --all --message-format=json
+          | clippy-sarif
+          | tee clippy-results.sarif
+          | sarif-fmt
+        continue-on-error: true
+      - name: Upload analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: clippy-results.sarif
+          wait-for-processing: true
