@@ -22,14 +22,22 @@ jobs:
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         # v4.1.1
+      - name: Cargo cache
+        uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
+        with:
+          cache-on-failure: true
       - name: Build
-        run: cargo build --verbose
+        run: cargo build --verbose --release
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         # v4.1.1
+      - name: Cargo cache
+        uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
+        with:
+          cache-on-failure: true
       - name: Run tests
         run: cargo test --verbose
 
@@ -46,6 +54,7 @@ jobs:
         uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
         with:
           cache-on-failure: true
+          cache-all-crates: true
       - name: Install tools
         run: cargo install cargo-make clippy-sarif sarif-fmt
       - name: Run clippy
