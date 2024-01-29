@@ -1,4 +1,3 @@
-use axum::BoxError;
 use axum::{
     routing::{get, put},
     Router,
