@@ -29,6 +29,9 @@ jobs:
         uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
         with:
           cache-on-failure: true
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
       - name: Build
         run: cargo build --verbose --release
 
@@ -41,6 +44,9 @@ jobs:
         uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
         with:
           cache-on-failure: true
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
       - name: Run tests
         run: cargo test --verbose
 
@@ -58,8 +64,10 @@ jobs:
         with:
           cache-on-failure: true
           cache-all-crates: true
-      - name: Install tools
-        run: cargo install cargo-make clippy-sarif sarif-fmt
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
+          components: cargo-make, clippy-sarif,sarif-fmt
       - name: Run clippy
         run: >
           cargo make --profile gha clippy
