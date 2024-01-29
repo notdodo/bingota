@@ -67,7 +67,7 @@ jobs:
       - uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
           toolchain: stable
-          components: cargo-make, clippy-sarif,sarif-fmt
+          components: cargo-make,clippy-sarif,sarif-fmt
       - name: Run clippy
         run: >
           cargo make --profile gha clippy
