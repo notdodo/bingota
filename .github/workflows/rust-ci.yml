@@ -1,6 +1,9 @@
 name: Rust
 
 on:
+  push:
+    branches:
+      - "main"
   pull_request:
     branches:
       - "main"
@@ -26,7 +29,6 @@ jobs:
         uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
         with:
           cache-on-failure: true
-          prefix-key: bingokta-build
       - name: Build
         run: cargo build --verbose --release
 
@@ -39,7 +41,6 @@ jobs:
         uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
         with:
           cache-on-failure: true
-          prefix-key: bingokta-tests
       - name: Run tests
         run: cargo test --verbose
 
@@ -57,12 +58,11 @@ jobs:
         with:
           cache-on-failure: true
           cache-all-crates: true
-          prefix-key: bingokta-lint
       - name: Install tools
         run: cargo install cargo-make clippy-sarif sarif-fmt
       - name: Run clippy
         run: >
-          cargo clippy --all-targets --all-features --message-format=json -- -D warnings
+          cargo make --profile gha clippy
           | clippy-sarif
           | tee clippy-results.sarif
           | sarif-fmt
