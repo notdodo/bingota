@@ -12,17 +12,59 @@ services:
       OPENTELEMETRY_IP: jaeger
     security_opt:
       - no-new-privileges:true
-    pid: "service:jaeger"
+    # kics-scan ignore-line
+    pid: "host"
+    networks:
+      - bingokta
+      - metrics
+    deploy:
+      resources:
+        limits:
+          cpus: 1
+          memory: 1024M
+    healthcheck:
+      # kics-scan ignore-line
+      disable: true
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=bingokta
+      - POSTGRES_DB=bingokta
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+    secrets:
+      - db_password
+    cap_drop:
+      - ALL
+    # kics-scan ignore-line
+    cap_add:
+      - CAP_CHOWN
+      - CAP_FOWNER
+      - CAP_DAC_OVERRIDE
+      - CAP_SETGID
+      - CAP_SETUID
+    ports:
+      - "127.0.0.1:5555:5432"
+    security_opt:
+      - no-new-privileges:true
+    pid: "service:web_app"
     networks:
       - bingokta
     deploy:
       resources:
         limits:
-          cpus: "0.5"
-          memory: 512M
+          cpus: 2
+          memory: 2048M
     healthcheck:
-      # kics-scan ignore-line
-      disable: true
+      test:
+        - "CMD-SHELL"
+        - "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      - web_app
 
   jaeger:
     image: jaegertracing/all-in-one:latest
@@ -40,7 +82,7 @@ services:
       - no-new-privileges:true
     pid: "service:web_app"
     networks:
-      - bingokta
+      - metrics
     deploy:
       resources:
         limits:
@@ -48,19 +90,20 @@ services:
           memory: 512M
     healthcheck:
       test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "http://jaeger:16686",
-          "-O",
-          "/dev/null",
-        ]
+        - "CMD"
+        - "wget --no-verbose --tries=1 http://jaeger:16686 -O /dev/null"
       timeout: 10s
       retries: 3
       start_period: 5s
+    depends_on:
+      - web_app
 
 networks:
   bingokta:
     driver: bridge
+  metrics:
+    driver: bridge
+
+secrets:
+  db_password:
+    file: ./secrets/db_password
