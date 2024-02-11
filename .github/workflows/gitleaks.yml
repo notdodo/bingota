@@ -1,6 +1,5 @@
 name: Gitleaks
 on:
-  pull_request:
   push:
 
 jobs:
