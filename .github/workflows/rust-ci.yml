@@ -1,4 +1,4 @@
-name: Rust
+name: Rust CI
 
 on:
   push:
@@ -17,6 +17,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  infra-security-scan:
-    uses: notdodo/github-actions/.github/workflows/rust-ci.yml@6435f219501455cc66ebc2654a6f7b9a7a0e4ab1
-    # v0.1.1
+  rust-ci:
+    uses: notdodo/github-actions/.github/workflows/rust-ci.yml@babf5448da25db0c3d47d0348fb3d6979e7fc555
+    # v0.1.2
