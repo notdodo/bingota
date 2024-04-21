@@ -16,3 +16,13 @@ updates:
       rust:
         patterns:
           - "*"
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+      time: "12:00"
+      day: wednesday
+    groups:
+      docker:
+        patterns:
+          - "*"
