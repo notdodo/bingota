@@ -27,3 +27,4 @@ jobs:
     with:
       egress-policy-allowlist: >
         index.crates.io:443
+        static.crates.io:443
