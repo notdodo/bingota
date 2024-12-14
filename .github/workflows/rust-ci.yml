@@ -22,9 +22,5 @@ concurrency:
 
 jobs:
   rust-ci:
-    uses: notdodo/github-actions/.github/workflows/rust-ci.yml@e778425d969309bb62ecb0d9fa89e12f54604436
-    # rust-ci-v0.0.0
-    with:
-      egress-policy-allowlist: >
-        index.crates.io:443
-        static.crates.io:443
+    uses: notdodo/github-actions/.github/workflows/rust-ci.yml@b1f5309dc916fc94cb96d27a96c3387719274dfd
+    # rust-ci-v0.0.1
