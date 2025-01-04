@@ -1,9 +1,7 @@
 name: Gitleaks
 on:
   pull_request:
-  push:
 
 jobs:
   gitleaks:
-    uses: notdodo/github-actions/.github/workflows/gitleaks.yml@bd7e6f1c05040910c960fa2eb6ad14bafa0651bf
-    # gitleaks-v0.0.1
+    uses: notdodo/github-actions/.github/workflows/gitleaks.yml@gitleaks-v0.0.2
